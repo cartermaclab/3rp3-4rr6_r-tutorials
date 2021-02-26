@@ -1,0 +1,83 @@
+---
+title: "Introduction and Review"
+subtitle: "KINESIOL 3RP3 R tutorials"
+author: "Mike Carter | *Memory, Action, & Cognition Lab*"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Why R? Or more generally, why learn a programming language?
+I can't remember if I spent any time in one of the earlier meetings talking about this--somehow it is equally likely that I did and have forgotten and that I didn't because I simply forgot!
+
+See for the [PYPL PopularitY of Programming Language](https://pypl.github.io/PYPL.html), which is created by analyzing how often language tutorials are searched on Google.
+
+Also see this article on the [The 10 most popular programming languages to learning in 2021](https://www.northeastern.edu/graduate/blog/most-popular-programming-languages/).
+
+## RMarkdown
+I briefly mentioned these RMarkdown documents in our earlier meetings. As you can see, it looks different than the R Scripts we have been using. The power of RMarkdown is that it is essentially a **Notebook**. This allows you to mix text and code (through code chunks) in a *cleaner* fashion than with scripts. Markdown itself is a simple formatting syntax for authoring HTML, PDF, and even awful Microsoft Turd documents. For more details on using RMarkdown, click [here](https://rmarkdown.rstudio.com/).
+
+To generate your document, you click the **Knit** button that will then output to the format specified in the YAML header (Lines 2 to 5 in this document that is sandwiched by the 3 dashes). The 3 dashes is what signifies this is the YAML header.
+
+So right now, I have html_document specified so it will generate an html file that can be opened in your internet browser. If you want to generate a pdf, then output should instead say pdf_document. But to generate this, you need to have a TeX distribution installed on your computer. This can easily be done within the R ecosystem by using the `tinytex` library. We did this in the first meeting when we talked about installing packages. I will show it again as this is a good opportunity to also show a code chunk.
+
+## Inserting code chunks
+You can insert a code chunk in 3 ways:
+  1. Click the +C green button near the Run button
+  2. Click Code -> Insert Chunk
+  3. Use the keyboard shortcut: `Ctrl+Alt+I` (this will be the shortcut on Linux and crappy Windows; on not as crappy as Windows MacOSX I think it will be `Cmd+Alt+I`)
+    - Recall, we can check what the actual keyboard shortcuts are by clicking Tools -> Keyboard Shortcuts Help
+
+## Our first code chunk
+
+```{r Install tinytex}
+# Check if tinytex is installed. If it is, it will be loaded. 
+# If any are not, the missing package(s) will be installed, then loaded
+if (!require(tinytex)) {
+  install.packages("tinytex")
+  library(tinytex)
+} else {
+    library(tinytex)
+  }
+
+# We aren't finished quite yet with getting tinytex installed as we
+# still need to run one last command
+tinytex::install_tinytex()
+```
+
+If you use the keyboard shortcut, it will default to an r code chunk. We know this because of the r inside the curly braces. Other languages are possible but you would need to ensure you have the necessary packages. However, we will only be using r code chunks.
+
+When you knit your document, all code chunks will be run in order. We can also run individual code chunks by either clicking the *Run* button within the code chunk. (There is also a *Run All Chunks* above button as well.)
+
+## Exercise 1
+Often we need to look at documentation, which simply means we need some help. This is built into R and we can gain more information about a library or a function within a library by asking for it in the **Console** pane. We can do this using a `?` before the function we want more information about. After executing the code, the documentation will appear in the **Help** pane.
+
+- In the your console type `?rnorm()` and then hit Enter. You should now see the documentation regarding this function as it relates to the Normal Distribution. You can find information about the Usage, Arguments, etc.
+
+### Exercise 1.1
+- Generate 15 observations using a mean of 100 and a standard deviation of 15.
+
+- What is one issue with this exercise? Hint: Think about the output from your code compared to the output everyone else generated.
+
+- How can we mitigate this issue? Re-run your `rnorm()` code but with this fix.
+
+## Exercise 2
+- Fix the following code so it would execute successfully:
+
+```{}
+library(TidyVerse)
+```
+
+## Objects
+When working in R, a big part of this will consist of creating objects. This is important because once we have created an object, we can actually do stuff to it or with it. An added bonus is that if we are working with a .csv file containing data from our experiment, all the data wrangling (i.e., manipulation) we do leaves that main file alone. None of the changes we do in R will affect that underlying .csv file, unless you call a write function and override that file.
+
+## Exercise 3
+- In the provided code chunk, create objects for your name, your age, your favourite animal, today's date, an object containing the output from `rnorm()` in exercise 1.1, and lastly an object that contains how old you will be 14 years from now. This new object containing your future age should be created by using the object your created with your current age.
+
+```{r}
+
+```
+
+- Here, you have created only a small number of objects and this amount is probably easy to keep in your working memory. Imagine you had 100 objects within an R session where you are working on some data. Where can you look to see all the objects that you have created?

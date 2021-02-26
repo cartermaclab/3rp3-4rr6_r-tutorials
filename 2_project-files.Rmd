@@ -1,0 +1,46 @@
+---
+title: "Project files and RMarkdown"
+subtitle: "KINESIOL 3RP3 R tutorials"
+author: "Mike Carter | *Memory, Action, & Cognition Lab*"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## A quick note about directories
+A directory is just another name for a folder and a subdirectory is another name for a subfolder. An important thing when working with any programming language is to know what your current working directory is. We can find this out very easily by using a base R function called `getwd`.
+
+```{r}
+# Figure out what your current working directory is
+getwd()
+```
+
+Almost always what you get here will not be the working directory that you want. To change it to your desired directory, we can use `setwd` from base R. You can also achieve this by going to Session -> Set Working Directory. However, in my opinion there is a **MUCH** better way: RStudio Project Files.
+
+## Using RStudio project files
+For me, the best way to work with R and RStudio is by creating a `.Rproj` file for the project you are going to work on. I think a good habit to get into is to make creating the project file the first you do when you open RStudio whenever you begin a new project. You can do this by going to File -> New Project. Here, you can create the `.Rproj` file into a new directory OR you can create the `.Rproj` file into an existing directory.
+
+You do not need to actually do this right now as the folder I had you download, contains a `.Rproj` file. In the **Files** pane, navigate to where you saved the folder I had you download. You should see a file called `kinesiol-3rp3.Rproj`. If you hover over the name with your cursor, a line will appear under the file name. Click the file name and when you are prompted about opening the project file, choose yes. 
+
+Once the project file is open, if you look in the top right corner of RStudio, you should see the name of the project file with a small, downward pointing arrow. This tells you that everything worked and you are currently working in this project. If it doesn't say kinesiol-3rp3, and says Project: (None), then you need to try re-loading the project file.
+
+The value of the project file is that it automatically sets your working directory to the location of the `.Rproj` file. This is helpful as it saves you having to explicitly remember to use the `setwd()` function. When we need to call certain files (more on this later), we can leverage relative path names rather than absolute path names. Relative paths are much more efficient and powerful, especially if you are sharing code, data, etc with collaborators or even yourself across multiple computers you have access to.
+
+## RMarkdown
+There are many great reasons why RMarkdown is awesome. We will look at one of them right now and it highlights how working in an RMarkdown document can be great when wanting to mix text, code, and output from code you have written.
+
+```{r Hello}
+name <- "Mike"
+highschool <- "Markville Secondary School"
+highschool_start <- as.Date("2000-09-01")
+today <- Sys.Date()
+```
+
+Hello, my name is `r name` and I went to `r highschool`. It has been `r today - highschool_start` days since I started highschool.
+
+What we have done in the above text passage is include inline code. What is amazing about this is that if we update the information in the code chunk, and re-knit the document, all the values reported in our passage will be updated to the new values. This is nice because if you are calling that value multiple times in a document and you had hardcoded it, you'd need to change it in every location. With this approach, you make the change in one location and it will update every where that you have used an inline code to refer to that object.
+
+## Exercise 1
+- Update the code chunk Hello with your own information. Re-knit the document.

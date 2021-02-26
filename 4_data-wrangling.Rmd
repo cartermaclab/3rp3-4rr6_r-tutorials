@@ -1,0 +1,179 @@
+---
+title: "Data wrangling: Penguins!"
+subtitle: "KINESIOL 3RP3 R tutorials"
+author: "Mike Carter | *Memory, Action, & Cognition Lab*"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Hello, Tidyverse!
+![Tidyverse logo](imgs/tidyverse-logo.png)
+As I mentioned before, the tidyverse is a metapackage. So when we installed tidyverse (i.e., *install.packages("tidyverse")*), it installed all the packages within it and any associated dependencies. The tidyverse is a collection of various libraries created by [Hadley Wickham](http://hadley.nz/).
+
+There are 6 main packages in the [tidyverse](https://www.tidyverse.org/): `dplyr`, `ggplot2`, `purrr`, `readr`, `tibble`, and `tidyr`. In the last RMarkdown document, we used the `readr` library. Here, we will focus on `dplyr`, which we saw very quickly last week.
+
+The material and information covered is heavily inspired by the corresponding section in R for Data Science by Hadley Wickham and Garrett Grolemund. R for Data Science can be accessed for free at [https://r4ds.had.co.nz/](https://r4ds.had.co.nz/).
+
+## `dplyr` library
+Recall that there are 6 key functions in the `dplyr` library. We can think of these as the *verbs* of the library as each function name cleary describes what we would use it for.
+  - `select()`: include or exclude certain columns (i.e., variables)
+  - `filter()`: include or exclude certain rows (i.e., observations)
+  - `mutate()`: create a new column (i.e., variable). The newly created column will be added to the end of the tibble.
+  - `arrange()`: Change the order of rows (i.e., observations)
+  - `group_by()`: Organize the rows into groups
+  - `summarize()`: Create aggregate variables for groups of observations
+
+These functions are known as *single table verbs* as they only operate on one table at a time. You can do pretty much everything you could possibly need to with your data using these 6 functions. Once you become familiar with them, you'll wonder why you ever used some spreadsheet program to do things manually (which is prone to error because we are humans and is much slower and time consuming).
+
+## Let's do some practice using an open dataset
+For this, will are going to use the palmer penguins library that is freely available. The `palmerpenguins` data contains size measurements for three penguin species observed on three islands in the Palmer Archipelago, Antarctica. These data were collected from 2007-2009 by Dr. Kristen Gorman with the [Palmer Station Long Term Ecological Research Program](https://pal.lternet.edu/), part of the [US Long Term Ecological Research Network](https://lternet.edu/). The data were imported directly from the [Environmental Data Initiative](https://environmentaldatainitiative.org/) Data Portal, and are available for use by CC0 license (“No Rights Reserved”) in accordance with the [Palmer Station Data Policy](https://pal.lternet.edu/data/policies).
+
+![The Palmer Archipelago penguins. Artwork by @allison_horst.](imgs/penguins.png)
+
+## Exercise 1
+- Install the `palmerpenguins` package from the CRAN repository.
+
+## The `palmerpenguins` library
+There are actually 2 datasets in the package. We will use the curated subset of the raw data, which is in a package named `penguins`.
+
+## Exercise 2
+```{r}
+# Load libraries
+library(tidyverse)
+library(palmerpenguins)
+data("penguins")
+```
+
+In your **Global Environment**, you may see a `<Promise>` beside `penguins`. If you click on the `<Promise>`, the dataset will be ready to go.
+
+```{r}
+# Let's look at the first few rows of the data
+head(penguins)
+
+# We can also get a snapshot of the data another way
+glimpse(penguins)
+```
+
+### Exercise 2.1
+- What is the difference between `head()` and `glimpse()`?
+- How many penguins (i.e., observations) are in the data set?
+- How many variables are in the data set?
+
+## Let's start wrangling our data!
+In our `penguins` tibble, every row is a unique observation (i.e., a penguin). We can see For each penguin, we have the `species`, the `island` it lives on, its `sex`, the `year` the measurements were taken, and various body size measurements.
+
+### Data wrangling: `filter()`
+`filter()` can be used to get a subset of observations based on their values. The first argument will specify the data we want to use the function on whereas the second and subsequent arguments are the expressions that we want to filter our data with.
+
+To use filtering effectively, we need to know how to use different **comparison operators**. R provides the following: `>`, `>=`, `<`, `<=`, `!=`, and `==`. Of these, it is the equal to (`==`) operator that often results in some errors as you need to adjust to hit the `=` key twice to invoke the equal to operator.
+
+```{r}
+# Create an object containing the data for only Adelie penguins
+adelie <- filter(penguins, species == "Adelie")
+
+# Create an object for each of the remaining species of penguin
+
+```
+
+Like a lot of things, there are many ways to arrive at the same output in R. To demonstrate this, create an object named `alt_adelie` that contains the same information as `adelie` but achieve this using a different comparison operator than equal to.
+
+```{r}
+# Create alt_adelie using an alternative comparison operator
+
+
+# As mentioned above, we can also filter based on multiple variables
+# Create a object that contains only female adelie penguins
+
+```
+
+We can also use `filter()` with **logical operators**. Multiple arguments to `filter()` can be done using: `&` is *and*, `|` is *or*, and `!` is *not*.
+
+![Complete set of boolean operations. x is the left-hand circle, y is the right-hand circle, and the shaded region show which parts each operator selects.](imgs/transform-logical.png)
+
+Another helpful tool is `x %in% y`, which will select every row where `x` is one of the values in `y`. (We saw this when we were creating an R script last week.)
+
+```{r}
+adelie_gentoo <- filter(penguins, species %in% c("Adelie", "Gentoo"))
+```
+
+By default, `filter()` only includes rows where the condition is `TRUE`. It will exclude both `FALSE` and `NA` values. If you want to keep missing values, you need to ask for them explicitly with the `is.na()` function.
+
+### Data wrangling: `arrange()`
+This works similar to `filter()` but it changes the order of rows rather than selecting them. You specify the data and a set of column names or more complicated expressions. If more than one column name is specified, each additional column is used to break ties in the values of preceding columns. We can also use other functions within to say re-order a column:
+
+```{r}
+# Re-order column in descending order
+arrange(penguins, desc(body_mass_g))
+```
+
+If there are missing values, `NA`, these are always sorted at the end.
+
+### Data wrangling: `select()`
+`select()` allows us to specify a specific subset of variables that we are actually interested in. This can be used to create a new object that only contains the variables we need to work with for a given set of actions. For instance, in motor learning experiments maybe we only want to have an object containing blocks from the practice phase from our larger data file that includes all phases.
+
+```{r}
+# Create an object that only contains species, island, and bill length
+select(penguins, species, island, bill_length_mm)
+
+# Can also achieve the above result with this code, which instructs to
+# select all columns between species and bill_length_mm, inclusive
+select(penguins, species:bill_length_mm)
+
+# Can also say select all columns except those from species and
+# bill_length_mm, inclusive
+select(penguins, -(species:bill_length_mm))
+```
+
+There are other helper functions that work well with `select()`:
+  - `starts_with("")`: matches names that begin with string input
+  - `ends_with("")`: matches names that end with string input
+  - `contains("")`: matches names that contain string input
+
+See `?select()` for more details on other helper functions.
+
+Sometimes we also need to rename a column. This can be achieved using `select()` but it is not very efficient as it will exclude all columns not explicitly included in your arguments. We can instead use `rename()`, which is a variant of `select()` that retains all variables
+
+```{r}
+rename(penguins, mass_g = body_mass_g)
+```
+
+Another useful function that can be used with `select()` is `everything()`. This can be useful when you have multiple variables you want to move to the start of your tibble.
+
+```{r}
+select(penguins, species, island, sex, everything())
+```
+
+### Data wrangling: `mutate()`
+Sometimes we want to create a new column in a tibble. This is what we use `mutate()` for. It is important to remember that `mutate()` will always add the new columns to the end of your tibble.
+
+```{r}
+# Create a smaller tibble first so we can easily see everything
+penguins_small <- select(penguins,
+                         species:bill_length_mm)
+
+# Add new column that converts bill length to cm
+mutate(penguins_small,
+       bill_length_cm = bill_length_mm / 10
+       )
+```
+
+### Data wrangling: `summarize()`
+We can use `summarize()` to collapse a tibble into a single row
+
+```{r}
+summarize(penguins, mass = mean(body_mass_g, na.rm = TRUE))
+```
+
+On its own, summarize is not super useful. It becomes far more flexible and powerful when used in conjunction with `group_by()`. This will change the unit of analysis from the complete data file to individual groups. Then if you use any of the `dplyr` verbs it will be applied *by group*.
+
+```{r}
+# Group by species and get mean weight
+by_species <- dplyr::group_by(penguins, species)
+summarize(by_species, mass = mean(body_mass_g, na.rm = TRUE))
+```
+
+### Data wrangling: pipes (%>%)
+We can string together multiple operations when we are working with our data by using the **pipe** operator. Pipes are written as `%>%` and we read them as *and then*. It is extremely awkward to type out the 3 characters that create the pipe so I highly recommend relying on the keyboard shortcut: `Ctrl+Shift+M` or `Cmd+Shift+M`. We will see the `%>%` a lot in the next document.  

@@ -1,0 +1,49 @@
+---
+title: "Loading data files"
+subtitle: "KINESIOL 3RP3 R tutorials"
+author: "Mike Carter | *Memory, Action, & Cognition Lab*"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Before we begin...
+It will be good to start with a clear environment. This can be achieved quickly by clicking the broom icon in the **Environment** pane. Alternatively, you could close the project and then re-open the project.
+
+## Working with data files
+If we have a data file or files we want to work with in RStudio, then we need to bring them into our environment. We briefly chatted about this already and said that we will be relying heavily on the `tidyverse` library for our data wrangling needs.
+
+## Exercise 1
+- Load the tidyverse library if you already have it installed. If not, install it and then load it.
+
+## Read in data
+We wanted to have `tidyverse` loaded so we can read in our data using `readr`, which is part of the `tidyverse`. The specific function is `read_csv()`. There is also a function called `read.csv()` which is part of base R. You **DO NOT** want to use this function as they are some behind the scenes differences between them. `read_csv()` is the `tidyverse` way and we will be using this approach.
+
+```{r Read in data files}
+expt_info <- readr::read_csv("data/expt-info.csv")
+
+# Read in the the performance-data.csv file into an
+# object called performance_data
+
+```
+
+You should now see 2 new objects in your environment pane. It is a good habit to inspect your data when you first load it to ensure it looks like what you expect.
+
+## Exercise 2
+- Inspect both objects i) by using your mouse and ii) programmatically. *Hint: Think back to last week when we went over how you can do this.*
+
+## Exercise 3
+Currently, we have our necessary data in 2 separate files. (I have simply split the data file I shared with you last week.) I did this to show you a quick way you can merge files together as we often need to do this if we have collected data in using different computers or techniques.
+
+We can do this using the `inner_join()` function from `dplyr`. You can use the help function, `?inner_join()`, to see the documentation. There are other approaches for joining files together but for our purposes, we want `inner_join()`.
+
+```{r Join our data files}
+expt1_data <- dplyr::inner_join(x = expt_info, # first tibble we want to join
+                                y = performance_data, # second tibble to join
+                                by = c("index", "id") # columns tibbles share
+                                )
+```
+
+You should now see a new object in your environment. Inspect this newly created object. You should notice that it looks identical to the non-split file I shared with you last week.
