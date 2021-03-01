@@ -34,17 +34,16 @@ You can insert a code chunk in 3 ways:
 
 ```{r Install tinytex}
 # Check if tinytex is installed. If it is, it will be loaded. 
-# If any are not, the missing package(s) will be installed, then loaded
+# If it is not, you will be told you need to install it.
 if (!require(tinytex)) {
-  install.packages("tinytex")
-  library(tinytex)
+  print("tinytex is not installed. Please install by typing install.packages("tinytex") in the console pane. Once installed, you can load it by typing library(tinytex)")
 } else {
     library(tinytex)
   }
 
 # We aren't finished quite yet with getting tinytex installed as we
 # still need to run one last command
-tinytex::install_tinytex()
+print("To finalize the installation of tinytex, you need to run tinytex::install_tinytex() in your console pane.")
 ```
 
 If you use the keyboard shortcut, it will default to an r code chunk. We know this because of the r inside the curly braces. Other languages are possible but you would need to ensure you have the necessary packages. However, we will only be using r code chunks.
